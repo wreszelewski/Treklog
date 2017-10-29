@@ -1,0 +1,9 @@
+{
+    "scripts": {
+        "test": "jasmine JASMINE_CONFIG_PATH=jasmine.json"
+    },
+    "devDependencies": {
+        "webpack": "^3.8.1",
+        "webpack-dev-server": "^2.9.3"
+    }
+}

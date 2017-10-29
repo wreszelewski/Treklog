@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Use correct character set. -->
+    <meta charset="utf-8">
+    <!-- Tell IE to use the latest, best version. -->
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <!-- Make the application on mobile take up the full browser screen and disable user scaling. -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+    <title>Treklog</title>
+    <!-- The Cesium library. -->
+    <script src="https://www.gstatic.com/firebasejs/4.6.0/firebase.js"></script>
+    <!-- Compiled and minified CSS -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
+
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/webpack-cesium/1.37.0/webpack.cesium.js"></script>
+    <style>
+        @import url(assets/css/widgets/widgets.css);
+    </style>
+    <link rel="stylesheet" href="/assets/css/main.css" media="screen">
+</head>
+
+<body>
+    <!-- A container for the Cesium Viewer to live in. -->
+    <div id="cesiumContainer"></div>
+    <div id="menuLauncher">
+        <button data-target="trackMenu" class="btn modal-trigger btn-flat white">Menu</button>
+        <button class="btn btn-flat white" onclick="Treklog.auth.login()">Login</button>
+    </div>
+
+    <div id="trackMenu" class="modal">
+        <div class="modal-content">
+            <h1>Admin</h1>
+            <div id="trackListContainer">
+                <div id="trackListPreloader">
+                    <div class="preloader-wrapper big active">
+                        <div class="spinner-layer spinner-blue-only">
+                            <div class="circle-clipper left">
+                                <div class="circle"></div>
+                            </div>
+                            <div class="gap-patch">
+                                <div class="circle"></div>
+                            </div>
+                            <div class="circle-clipper right">
+                                <div class="circle"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <ul id="trackList" class="collection">
+            </ul>
+        </div>
+    </div>
+
+    <div id="addTrack" class="modal">
+        <div class="modal-content">
+            <h1>Dodaj trasę</h1>
+            <input type="file" id="input" />
+            <input type="text" id="trackName" />
+            <input type="text" id="trackDescription" />
+            <a class="waves-effect waves-light btn" onClick="Treklog.uploader.sendFile()">dodaj</a>
+        </div>
+    </div>
+
+    <a data-target="addTrack" class="btn-floating waves-effect waves-light btn-large red bottom-right modal-trigger"><i class="material-icons">add</i></a>
+
+    <!-- Our application code. -->
+    <script src="/assets/js/bundle.js"></script>    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/togeojson/0.16.0/togeojson.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/spark-md5/3.0.0/spark-md5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.19.1/moment.min.js"></script>
+
+    <script>
+        var viewer = Treklog.setUp();
+        Treklog.trackList.renderAdminTrackList();
+    </script>
+</body>
+
+</html>

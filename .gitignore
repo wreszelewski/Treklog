@@ -1,0 +1,5 @@
+node_modules/*
+public/assets/js/bundle.js
+config.js
+.firebaserc
+package-lock.json
