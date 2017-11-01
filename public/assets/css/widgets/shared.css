@@ -11,7 +11,7 @@
     display: inline-block;
     position: relative;
     background: #303336;
-    border: 1px solid #444;
+    border: 2px solid white;
     color: #edffff; /* For text buttons */
     fill: #edffff; /* For SVG buttons */
     border-radius: 4px;
@@ -79,7 +79,7 @@
 }
 
 .cesium-toolbar-button {
-    box-sizing: border-box;
+    box-sizing: content-box;
     width: 32px;
     height: 32px;
     border-radius: 14%;

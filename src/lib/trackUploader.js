@@ -1,3 +1,4 @@
+const firebase = require('firebase');
 const slugify = require('./external/slugify');
 
 function sendFile() {

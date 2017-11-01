@@ -75,10 +75,6 @@
     word-wrap: break-word;
 }
 
-.cesium-baseLayerPicker-item:hover .cesium-baseLayerPicker-itemLabel, .cesium-baseLayerPicker-item:focus .cesium-baseLayerPicker-itemLabel {
-    text-decoration: underline;
-}
-
 .cesium-baseLayerPicker-itemIcon {
     display: inline-block;
     position: relative;
@@ -92,17 +88,4 @@
     padding: 0;
     cursor: pointer;
     box-sizing: border-box;
-}
-
-.cesium-baseLayerPicker-item:hover .cesium-baseLayerPicker-itemIcon {
-    border-color: #fff;
-    box-shadow: 0 0 8px #fff, 0 0 8px #fff;
-}
-
-.cesium-baseLayerPicker-selectedItem .cesium-baseLayerPicker-itemLabel {
-    color: rgb(189, 236, 248);
-}
-
-.cesium-baseLayerPicker-selectedItem .cesium-baseLayerPicker-itemIcon {
-    border: double 4px rgb(189, 236, 248);
 }

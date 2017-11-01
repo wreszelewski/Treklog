@@ -1,24 +1,28 @@
-const loadTrack = require('./trackLoader').loadTrack
-const config = require('./config')
+const loadTrack = require('./trackLoader').loadTrack;
+const config = require('./config');
+const loader = require('./loader');
 
-$(document).ready(function(){
+$(document).ready(function () {
     $('.modal').modal();
-    if(window.location.pathname === "/" || window.location.pathname === '/admin.html') {
-        $('#trackMenu').modal('open');
+    if (window.location.pathname === "/" || window.location.pathname === '/admin.html') {
+        //$('#trackMenu').modal('open');
+    } else {
+        loadTrack(window.location.pathname, config.cesium.navigation.maxLinkFlightHeight);
     }
 });
 
-window.onpopstate = function(event) {
-    if(event.state.treklogModified) {
-        loadTrack(event.state.url)
+window.onpopstate = function (event) {
+    if (event.state.treklogModified) {
+        loadTrack(event.state.url, config.cesium.navigation.maxLinkFlightHeight);
     }
 }
 
 function getTrackLinkHandler(url) {
-    return function(event) {
+    return function (event) {
         event.preventDefault();
+        loader.showLoader();
         loadTrack(url, config.cesium.navigation.maxLinkFlightHeight);
-        $('#trackMenu').modal('close');
+        $('#trackMenu').modal('hide');
         history.pushState({
             treklogModified: true,
             url
