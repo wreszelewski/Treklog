@@ -21,7 +21,10 @@ function getTracks() {
 }
 
 function getTrack(path) {
-    const splittedPath = path.slice(1).split('/');
+    if(path.startsWith('/')) {
+        path = path.slice(1);
+    }
+    const splittedPath = path.split('/');
     return getTracks()
         .then(currentTrack => {
             splittedPath.forEach(pathElement => {
