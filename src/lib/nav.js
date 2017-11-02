@@ -4,9 +4,7 @@ const loader = require('./loader');
 
 $(document).ready(function () {
     $('.modal').modal();
-    if (window.location.pathname === "/" || window.location.pathname === '/admin.html') {
-        //$('#trackMenu').modal('open');
-    } else {
+    if (window.location.pathname !== "/" && !window.location.pathname !== '/admin') {
         loadTrack(window.location.pathname, config.cesium.navigation.maxLinkFlightHeight);
     }
 });

@@ -4,3 +4,4 @@ config.js
 .firebaserc
 package-lock.json
 coverage/*
+firebase-debug.log

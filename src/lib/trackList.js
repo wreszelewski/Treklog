@@ -30,7 +30,7 @@ function createTrackListElement(track, mode) {
 
     let trackListElement = document.createElement('div');
     trackListElement.href = getTrackUrl(track.url, mode);
-    trackListElement.addEventListener('click', getTrackLinkHandler(track.url));
+    trackListElement.addEventListener('click', getTrackLinkHandler(getTrackUrl(track.url, mode)));
     trackListElement.className = "item";
 
     let content = document.createElement('div');
@@ -52,6 +52,9 @@ function createTrackListElement(track, mode) {
 }
 
 function getTrackUrl(url, mode) {
+    if(url.startsWith('/')) {
+        url = url.slice(1);
+    }
     if (mode === 'admin') {
         return 'admin/' + url;
     } else {

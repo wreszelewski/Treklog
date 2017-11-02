@@ -28,7 +28,7 @@ function renderTrackList(mode) {
         const trackObjects = createTrackList(tracks, mode);
         trackObjects.forEach(track => trackList.appendChild(track));
     }).then(() => {
-        if (window.location.pathname === "/" || window.location.pathname === '/admin.html') {
+        if (window.location.pathname === "/" || window.location.pathname === '/admin') {
             loader.hideLoader();
             $('#trackMenu').modal('show');
         }

@@ -10,14 +10,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
     <title>Treklog</title>
     <!-- The Cesium library. -->
-    <script src="https://www.gstatic.com/firebasejs/4.6.0/firebase.js"></script>
     <!-- Compiled and minified CSS -->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.13/semantic.min.css">
+    
 
     <!-- Compiled and minified JavaScript -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.13/semantic.min.js"></script>    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/webpack-cesium/1.37.0/webpack.cesium.js"></script>
     <style>
         @import url(assets/css/widgets/widgets.css);
@@ -29,52 +29,53 @@
     <!-- A container for the Cesium Viewer to live in. -->
     <div id="cesiumContainer"></div>
     <div id="menuLauncher">
-        <button data-target="trackMenu" class="btn modal-trigger btn-flat white">Menu</button>
-        <button class="btn btn-flat white" onclick="Treklog.auth.login()">Login</button>
+            <button class="ui inverted button" onclick="$('#trackMenu').modal('show')">Menu</button>
+            <button class="ui inverted button" onclick="Treklog.auth.login()">Login</button>
+            <button class="ui inverted button" onclick="$('#addTrack').modal('show')">Dodaj trasę</a>
     </div>
 
-    <div id="trackMenu" class="modal">
-        <div class="modal-content">
-            <h1>Admin</h1>
-            <div id="trackListContainer">
-                <div id="trackListPreloader">
-                    <div class="preloader-wrapper big active">
-                        <div class="spinner-layer spinner-blue-only">
-                            <div class="circle-clipper left">
-                                <div class="circle"></div>
-                            </div>
-                            <div class="gap-patch">
-                                <div class="circle"></div>
-                            </div>
-                            <div class="circle-clipper right">
-                                <div class="circle"></div>
-                            </div>
-                        </div>
+    <div id="screenLoader" class="ui segment">
+            <div class="ui active inverted dimmer">
+                <div class="ui large text loader">Ładowanie</div>
+            </div>
+        </div>
+    
+        <div id="trackMenu" class="ui basic tiny modal">
+            <div class="content">
+                <h1>Treklog</h1>
+                <div id="trackListContainer">
+    
+                    <div id="trackList" class="ui link divided items">
+                        
                     </div>
                 </div>
             </div>
-            <ul id="trackList" class="collection">
-            </ul>
         </div>
-    </div>
 
-    <div id="addTrack" class="modal">
-        <div class="modal-content">
+    <div id="addTrack" class="ui basic tiny modal">
+        <div class="content">
             <h1>Dodaj trasę</h1>
-            <input type="file" id="input" />
-            <input type="text" id="trackName" />
-            <input type="text" id="trackDescription" />
-            <a class="waves-effect waves-light btn" onClick="Treklog.uploader.sendFile()">dodaj</a>
+            <div class="ui inverted form">
+                <div class="field">
+                <label>Pliki gpx</label>
+                <input type="file" id="input"/>
+                </div>
+                <div class="field">
+                <label>Nazwa</label>                        
+                <input type="text" id="trackName" />
+                </div>
+                <div class="field">
+                <label>Opis</label>                        
+                <input type="text" id="trackDescription" />
+                </div>
+                <button class="ui inverted button" onClick="Treklog.uploader.sendFile()">Dodaj</button>
+            </div>
         </div>
     </div>
-
-    <a data-target="addTrack" class="btn-floating waves-effect waves-light btn-large red bottom-right modal-trigger"><i class="material-icons">add</i></a>
 
     <!-- Our application code. -->
     <script src="/assets/js/bundle.js"></script>    
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/togeojson/0.16.0/togeojson.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/spark-md5/3.0.0/spark-md5.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.19.1/moment.min.js"></script>
 
     <script>
         var viewer = Treklog.setUp();
