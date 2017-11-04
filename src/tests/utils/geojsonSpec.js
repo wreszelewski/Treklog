@@ -1,10 +1,5 @@
 const {
-    getTrackDuration,
-    getTrackAltitudeStats,
-    getTrackDate,
-    getTrackDistance,
-    getFilteredTrack,
-    gpxStringToGeoJSON
+    Track
 } = require('../../lib/utils/geojson');
 const geojsonInput = require('./data.geojson');
 const largeGeoJson = require('./dataLarge.geojson');
@@ -12,31 +7,35 @@ const multiLineGeoJson = require('./dataMultiLine.geojson');
 const fs = require('fs');
 const _ = require('lodash');
 
-describe('geojson utils', () => {
+describe('Track', () => {
 
-    describe('getTrackDuration', () => {
+    describe('getDuration', () => {
         it('should return proper track duration for LineString input', () => {
-            const duration = getTrackDuration(geojsonInput);
-            expect(duration).toEqual(8114000);
+            const track = new Track(geojsonInput);
+            const duration = track.getDuration();
+            expect(duration).toEqual(8139000);
         });
 
         it('should return proper track duration for MultiLineString input', () => {
-            const duration = getTrackDuration(multiLineGeoJson);
+            const track = new Track(multiLineGeoJson);
+            const duration = track.getDuration();
             expect(duration).toEqual(48211000);
         });
     });
 
     describe('getTrackAltitudeStats', () => {
         it('should return proper altitide stats for LineString input', () => {
-            const altitudeStats = getTrackAltitudeStats(geojsonInput);
+            const track = new Track(geojsonInput);
+            const altitudeStats = track.getTrackAltitudeStats();
             expect(altitudeStats.maxAltitude).toEqual(1208);
             expect(altitudeStats.minAltitude).toEqual(584);
-            expect(altitudeStats.ascent).toEqual(649);
+            expect(altitudeStats.ascent).toEqual(650);
             expect(altitudeStats.descent).toEqual(28);
         });
 
         it('should return proper altitide stats for MultiLineString input', () => {
-            const altitudeStats = getTrackAltitudeStats(multiLineGeoJson);
+            const track = new Track(multiLineGeoJson);
+            const altitudeStats = track.getTrackAltitudeStats();
             expect(altitudeStats.maxAltitude).toEqual(120);
             expect(altitudeStats.minAltitude).toEqual(38);
             expect(altitudeStats.ascent).toEqual(501);
@@ -46,7 +45,8 @@ describe('geojson utils', () => {
         it('should not return altitude stats if no height in geojson', () => {
             let geoJsonNoHeight = _.cloneDeep(geojsonInput);
             geoJsonNoHeight.features[0].geometry.coordinates = geoJsonNoHeight.features[0].geometry.coordinates.map((entry) => entry.slice(0,1));
-            const altitudeStats = getTrackAltitudeStats(geoJsonNoHeight);
+            const track = new Track(geoJsonNoHeight);
+            const altitudeStats = track.getTrackAltitudeStats();
             expect(altitudeStats.maxAltitude).toEqual(null);
             expect(altitudeStats.minAltitude).toEqual(null);
             expect(altitudeStats.ascent).toEqual(null);
@@ -56,30 +56,33 @@ describe('geojson utils', () => {
 
     describe('getTrackDate', () => {
         it('should return proper track start date', () => {
-            const date = getTrackDate(geojsonInput);
+            const track = new Track(geojsonInput);
+            const date = track.getTrackDate();
             expect(date.toISOString()).toEqual('2017-07-14T07:05:01.000Z');
         });
     })
 
     describe('getTrackDistance', () => {
         it('should properly calculate track distance', () => {
-            const distance = getTrackDistance(geojsonInput);
-            expect(distance).toEqual(6099);
+            const track = new Track(geojsonInput);
+            const distance = track.getTrackDistance();
+            expect(distance).toEqual(6130);
         });
     });
 
     describe('getFilteredTrack', () => {
         it('should return track with points that are at least 25m from each other', () => {
-            const track = getFilteredTrack(largeGeoJson);
-            expect(track).toEqual(geojsonInput);
+            const track = new Track(largeGeoJson);
+            const lightTrack = track.getFilteredTrack();
+            expect(lightTrack).toEqual(geojsonInput);
         });
     });
 
-    describe('gpxStringToGeoJson', () => {
+    describe('fromGpx', () => {
         it('should convert gpx string to geojson', () => {
             const gpxString = fs.readFileSync(__dirname + '/data.gpx').toString();
-            const geojson = gpxStringToGeoJSON(gpxString);
-            expect(geojson).toEqual(largeGeoJson);
+            const track = Track.fromGpx(gpxString);
+            expect(track.originalGeoJson).toEqual(largeGeoJson);
         })
     });
 })

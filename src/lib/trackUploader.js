@@ -1,12 +1,7 @@
 const firebase = require('firebase');
 const slugify = require('./external/slugify');
 const {
-    gpxStringToGeoJSON,
-    getTrackDuration,
-    getTrackAltitudeStats,
-    getTrackDistance,
-    getFilteredTrack,
-    getTrackDate
+    Track
 } = require('./utils/geojson');
 const SparkMD5 = require('spark-md5');
 
@@ -17,20 +12,21 @@ function sendFile() {
     reader.onload = function(e) {
         const text = reader.result;
         const hash = SparkMD5.hash(text);
-        const originalGeoJson = gpxStringToGeoJSON(text);
+        const track = Track.fromGpx(text);
+        const originalGeoJson = track.originalGeoJson;
 
-        const duration = getTrackDuration(originalGeoJson);
+        const duration = track.getDuration();
         const {
             minAltitude,
             maxAltitude,
             ascent,
             descent
-        } = getTrackAltitudeStats(originalGeoJson);
+        } = track.getTrackAltitudeStats();
         
-        const distance = getTrackDistance(originalGeoJson);
-        const filteredGeoJson = getFilteredTrack(originalGeoJson);
+        const distance = track.getTrackDistance();
+        const filteredGeoJson = track.getFilteredTrack();
         
-        const date = getTrackDate(originalGeoJson);
+        const date = track.getTrackDate();
         const lightGeoJsonPath = 'gpsTracks/' + hash + '.geojson';
         const originalGeoJsonPath = 'originalGpsTracks/' + hash + '.geojson';        
         const name = document.getElementById("trackName").value;
