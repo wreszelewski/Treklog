@@ -52,11 +52,11 @@ function createTrackListElement(track, mode) {
 }
 
 function getTrackUrl(url, mode) {
-    if(url.startsWith('/')) {
-        url = url.slice(1);
+    if(!url.startsWith('/')) {
+        url = '/' + url;
     }
     if (mode === 'admin') {
-        return 'admin/' + url;
+        return '/admin' + url;
     } else {
         return url;
     }
