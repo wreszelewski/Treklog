@@ -1,6 +1,9 @@
 const toGeoJSON = require('togeojson');
 const moment = require('moment');
 const geolib = require('geolib');
+const SparkMD5 = require('spark-md5');
+const slugify = require('../external/slugify');
+
 
 class Track {
 
@@ -8,6 +11,7 @@ class Track {
         const gpx = (new DOMParser()).parseFromString(gpxString, 'text/xml', null, 4);
         const geojson = toGeoJSON.gpx(gpx);
         const track = new Track(geojson);
+        track.setHash(SparkMD5.hash(gpxString));
         return track;
     }
 
@@ -15,6 +19,9 @@ class Track {
         this.originalGeoJson = originalGeoJson;
         this._coordinates = this._getCoordinates();
         this._coordTimes = this._getCoordTimes();
+        this.name;
+        this.description;
+        this.hash;
     }
 
     _getCoordinates() {
@@ -127,6 +134,26 @@ class Track {
         };
     }
 
+    setName(name) {
+        this.name = name;
+    }
+
+    setDescription(description) {
+        this.description = description;
+    }
+
+    setHash(hash) {
+        this.hash = hash;
+    }
+
+    _getOriginalDataPath() {
+        return 'originalGpsTracks/' + this.hash + '.geojson';
+    }
+
+    _getFilteredDataPath() {
+        return 'gpsTracks/' + this.hash + '.geojson';
+    }
+
     getFilteredTrack() {
         let lightGeoJson = this._getGeoJsonWithoutPoints();
     
@@ -153,7 +180,34 @@ class Track {
     _pushPointToTrack(track, index) {
         track.features[0].geometry.coordinates.push(this._coordinates[index]);
         track.features[0].properties.coordTimes.push(this._coordTimes[index]);
-    } 
+    }
+
+    getUrl() {
+        return '/' + this.getTrackDate().year() + '/' + slugify(this.name, {lower: true});
+    }
+
+    _serialize() {
+        let trackToSave = {};
+        const originalDataPath = this._getOriginalDataPath();
+        const filteredDataPath = this._getFilteredDataPath();
+
+        trackToSave.name = this.name;
+        trackToSave.description = this.description;
+        trackToSave.date = this.getTrackDate().toISOString();
+        trackToSave.geoJsonPath = filteredDataPath;
+        trackToSave.originalGeoJsonPath = originalDataPath;
+        trackToSave.url = this.getUrl();
+        trackToSave.distance = this.getTrackDistance();
+        trackToSave.duration = this.getDuration();
+        trackToSave = Object.assign(trackToSave, this.getTrackAltitudeStats());
+        trackToSave.initialPosition = {
+            heading: 0,
+            pitch: -0.6981317007977318,
+            height: 14000
+        }
+
+        return trackToSave;
+    }
 
 }
 
