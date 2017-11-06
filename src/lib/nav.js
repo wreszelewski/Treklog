@@ -1,4 +1,4 @@
-const loadTrack = require('./trackLoader').loadTrack;
+const loadTrack = require('./trackLoader').loadTrackByPath;
 const config = require('./config');
 const loader = require('./loader');
 
