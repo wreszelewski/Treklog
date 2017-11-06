@@ -1,18 +1,21 @@
-const firebase = require('firebase');
 const moment = require('moment');
+const { getTracksRaw, storeFile, storeTrackMetadata } = require('./utils/firebase');
 
-function getTracks(forceRefresh=false) {
+function getTracks() {
     let tracksObj = localStorage.getItem('tracks');
     if(tracksObj) {
         tracksObj = JSON.parse(tracksObj);
     }
-    if(!forceRefresh && tracksObj && moment(tracksObj.refreshDate).isAfter(moment().subtract('1 hour'))) {
+    
+    const hourBefore = moment();
+    hourBefore.subtract(1, 'hours');
+    if(tracksObj && moment(tracksObj.refreshDate).isAfter(hourBefore)) {
         return Promise.resolve(tracksObj.tracks);
     } else {
-        return firebase.database().ref('/tracks').once('value').then(function (tracksInYearRaw) {
+        return getTracksRaw().then((tracksInYearRaw) => {
             newTracksObj = {
                 refreshDate: moment().toISOString,
-                tracks: tracksInYearRaw.val()
+                tracks: tracksInYearRaw
             }
             localStorage.setItem('tracks', JSON.stringify(newTracksObj));
             return newTracksObj.tracks;
@@ -20,15 +23,13 @@ function getTracks(forceRefresh=false) {
     }
 }
 
-function getTrack(path, forceRefresh=false) {
+function getTrack(path) {
     if(path.startsWith('/')) {
         path = path.slice(1);
     }
     const splittedPath = path.split('/');
-    console.log(splittedPath);
-    return getTracks(forceRefresh)
+    return getTracks()
         .then(currentTrack => {
-            console.log(currentTrack);
             splittedPath.forEach(pathElement => {
                 currentTrack = currentTrack[pathElement];
             });
@@ -38,13 +39,13 @@ function getTrack(path, forceRefresh=false) {
 
 function storeTrack(data, filteredTrack, originalTrack) {
     const metadata = {
-        contentType: 'aplication/json',
+        contentType: 'application/json',
     };
-    const lightFileUpload = firebase.storage().ref().child(data.geoJsonPath).putString(JSON.stringify(filteredTrack, 'raw', metadata));
-    const originalFileUplaod = firebase.storage().ref().child(data.originalGeoJsonPath).putString(JSON.stringify(originalTrack), 'raw', metadata);
+    const lightFileUpload = storeFile(data.geoJsonPath, filteredTrack, metadata);
+    const originalFileUplaod = storeFile(data.originalGeoJsonPath, originalTrack, metadata);
     return Promise.all([lightFileUpload, originalFileUplaod])
         .then(() => {
-            return firebase.database().ref('tracks' + data.url).set(data);
+            return storeTrackMetadata(data.url, data);
         });
 }
 

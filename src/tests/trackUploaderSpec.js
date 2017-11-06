@@ -1,1 +1,0 @@
-const trackUploader = require('../lib/trackUploader');
