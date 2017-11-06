@@ -3,7 +3,6 @@ const config = require('./config');
 const loader = require('./loader');
 
 $(document).ready(function () {
-    $('.modal').modal();
     if (window.location.pathname !== "/" && !window.location.pathname !== '/admin') {
         loadTrack(window.location.pathname, config.cesium.navigation.maxLinkFlightHeight);
     }

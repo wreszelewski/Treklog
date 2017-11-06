@@ -54,7 +54,9 @@
     <script src="/assets/js/bundle.js"></script>
     <script>
         var viewer = Treklog.setUp();
-        window.Treklog.trackList.renderUserTrackList();
+        $(document).ready(function () {
+            window.Treklog.trackList.renderUserTrackList();
+        });
     </script>
 </body>
 
