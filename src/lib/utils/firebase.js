@@ -14,5 +14,7 @@ function storeTrackMetadata(path, data) {
 }
 
 module.exports = {
-    getTracksRaw
+    getTracksRaw,
+    storeFile,
+    storeTrackMetadata
 }
