@@ -41,10 +41,10 @@ function storeTrack(data, filteredTrack, originalTrack) {
     const metadata = {
         contentType: 'application/json',
     };
-    const lightFileUpload = storeFile(data.geoJsonPath, filteredTrack, metadata);
-    const originalFileUplaod = storeFile(data.originalGeoJsonPath, originalTrack, metadata);
-    return Promise.all([lightFileUpload, originalFileUplaod])
+    return storeFile(data.geoJsonPath, filteredTrack, metadata)
         .then(() => {
+            return storeFile(data.originalGeoJsonPath, originalTrack, metadata);
+        }).then(() => {
             return storeTrackMetadata(data.url, data);
         });
 }
