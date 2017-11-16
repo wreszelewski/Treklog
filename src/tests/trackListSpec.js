@@ -11,9 +11,9 @@ describe("trackList", function() {
       warnOnUnregistered: false,
       useCleanCache: true
     });
-
-    navMock = jasmine.createSpyObj('nav', ['getTrackLinkHandler']);
+    navMock = jasmine.createSpyObj('nav', ['getTrackLinkHandler', 'getTrackUrl']);
     navMock.getTrackLinkHandler.andReturn(() => {});
+    navMock.getTrackUrl.andCallFake((url) => url);
     mockery.registerMock('./nav', navMock);
     TrackList = require('../lib/trackList');
   });
@@ -24,28 +24,6 @@ describe("trackList", function() {
   });
 
   describe("createTrackList", () => {
-    it('should create properly formatted user DOM Element', () => {
-
-      const tracksPerYear = {
-        2017: {
-          test: {
-            date: '2017-09-02T06:06:03.000Z',
-            description: 'test',
-            geoJsonPath: 'gpsTracks/test.geojson',
-            name: 'test',
-            url: '2017/test'
-          }
-        }
-      };
-      const mode = 'user';
-
-      const trackList = TrackList.createTrackList(tracksPerYear, mode);
-      let wrapper = document.createElement('div');
-      wrapper.appendChild(trackList[0]);
-      expect(wrapper.innerHTML).toEqual('<div class="item"><div class="content"><div class="header">test - 02.09.2017</div><div>test</div></div></div>');
-      expect(navMock.getTrackLinkHandler).toHaveBeenCalledWith('/2017/test');
-
-    });
 
     it('should create properly formatted admin DOM Element', () => {
       
@@ -66,11 +44,11 @@ describe("trackList", function() {
             let wrapper = document.createElement('div');
             wrapper.appendChild(trackList[0]);
             expect(wrapper.innerHTML).toEqual('<div class="item"><div class="content"><div class="header">test - 02.09.2017</div><div>test</div></div></div>');
-            expect(navMock.getTrackLinkHandler).toHaveBeenCalledWith('/admin/2017/test');
+            expect(navMock.getTrackLinkHandler).toHaveBeenCalledWith('/2017/test', 'admin');
       
     });
 
-    it('should create properly formatted user DOM Element when url starts with /', () => {
+    it('should create properly formatted user DOM Element', () => {
       
             const tracksPerYear = {
               2017: {
@@ -89,7 +67,7 @@ describe("trackList", function() {
             let wrapper = document.createElement('div');
             wrapper.appendChild(trackList[0]);
             expect(wrapper.innerHTML).toEqual('<div class="item"><div class="content"><div class="header">test - 02.09.2017</div><div>test</div></div></div>');
-            expect(navMock.getTrackLinkHandler).toHaveBeenCalledWith('/2017/test');
+            expect(navMock.getTrackLinkHandler).toHaveBeenCalledWith('/2017/test', 'user');
       
           });
 

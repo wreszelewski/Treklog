@@ -1,10 +1,18 @@
-const loadTrack = require('./trackLoader').loadTrackByPath;
+const { loadTrackByPath } = require('./trackLoader');
 const config = require('./config');
 const loader = require('./loader');
+const animation = require('./animation');
 
 $(document).ready(function () {
-    if (window.location.pathname !== "/" && !window.location.pathname !== '/admin') {
-        loadTrack(window.location.pathname, config.cesium.navigation.maxLinkFlightHeight);
+    if (window.location.pathname !== "/" && window.location.pathname !== '/admin') {
+        loadTrackByPath(window.location.pathname, config.cesium.navigation.maxLinkFlightHeight)
+            .then(() => {
+                loader.hideLoader();
+                animation.showBar();                
+                if(window.location.pathname !== '/admin') {
+                    $('#editTrack').show();
+                }
+            });
     }
 });
 
@@ -14,19 +22,39 @@ window.onpopstate = function (event) {
     }
 }
 
-function getTrackLinkHandler(url) {
+function getTrackLinkHandler(url, mode) {
     return function (event) {
+        animation.reset();
         event.preventDefault();
         loader.showLoader();
-        loadTrack(url, config.cesium.navigation.maxLinkFlightHeight);
         $('#trackMenu').modal('hide');
         history.pushState({
             treklogModified: true,
-            url
-        }, '', url);
+            url: getTrackUrl(url, mode)
+        }, '', getTrackUrl(url, mode));
+        loadTrackByPath(url, config.cesium.navigation.maxLinkFlightHeight)
+            .then(() => {
+                loader.hideLoader();
+                animation.showBar();
+                if(mode === 'admin') {
+                    $('#editTrack').show();
+                }
+            });
+    }
+}
+
+function getTrackUrl(url, mode) {
+    if(!url.startsWith('/')) {
+        url = '/' + url;
+    }
+    if (mode === 'admin') {
+        return '/admin' + url;
+    } else {
+        return url;
     }
 }
 
 module.exports = {
-    getTrackLinkHandler
+    getTrackLinkHandler,
+    getTrackUrl
 }

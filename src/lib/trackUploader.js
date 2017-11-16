@@ -2,6 +2,7 @@ const {
     Track
 } = require('./utils/geojson');
 const { loadTrack } = require('./trackLoader');
+const loader = require('./loader');
 
 function loadFile() {
     var selectedFile = document.getElementById('input').files[0];
@@ -21,6 +22,7 @@ function loadFile() {
 }
 
 function sendFile() {
+    loader.showLoader();
     var selectedFile = document.getElementById('input').files[0];
     var reader = new FileReader();
 
@@ -29,8 +31,19 @@ function sendFile() {
         const track = Track.fromGpx(text);
         track.setName(document.getElementById("trackName").value);
         track.setDescription(document.getElementById("trackDescription").value || '');
+        $('#addTrack').modal('hide');
         track.store()
-            .then(loadTrack(track));
+            .then(() => {
+                history.pushState({
+                    treklogModified: true,
+                    url: '/admin' + track.url
+                }, '', '/admin' + track.url);
+                return loadTrack(track)
+            }).then(() => {
+                loader.hideLoader();
+                
+                $('#editTrack').show();
+            });
     }
 
     reader.readAsText(selectedFile, 'utf-8');

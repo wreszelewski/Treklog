@@ -4,7 +4,7 @@ const geolib = require('geolib');
 const SparkMD5 = require('spark-md5');
 const slugify = require('../external/slugify');
 const { storeTrack } = require('../database');
-
+const czml = require('./czml');
 
 class Track {
 
@@ -182,6 +182,10 @@ class Track {
         return lightGeoJson;
     }
 
+    get czml() {
+        return czml.fromGeoJson(this.filteredTrack);
+    }
+
     _pushPointToTrack(track, index) {
         track.features[0].geometry.coordinates.push(this._coordinates[index]);
         track.features[0].properties.coordTimes.push(this._coordTimes[index]);
@@ -210,7 +214,8 @@ class Track {
 
     store() {
         const data = this._serialize();
-        return storeTrack(data, this.filteredTrack, this.originalGeoJson);
+        console.log(this.czml);
+        return storeTrack(data, this.filteredTrack, this.originalGeoJson, this.czml);
     }
 
 }

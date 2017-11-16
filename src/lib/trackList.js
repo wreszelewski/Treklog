@@ -1,4 +1,4 @@
-const { getTrackLinkHandler } = require('./nav');
+const { getTrackLinkHandler, getTrackUrl } = require('./nav');
 const moment = require('moment');
 
 function createTrackList(tracksPerYear, mode) {
@@ -30,7 +30,7 @@ function createTrackListElement(track, mode) {
 
     let trackListElement = document.createElement('div');
     trackListElement.href = getTrackUrl(track.url, mode);
-    trackListElement.addEventListener('click', getTrackLinkHandler(getTrackUrl(track.url, mode)));
+    trackListElement.addEventListener('click', getTrackLinkHandler(track.url, mode));
     trackListElement.className = "item";
 
     let content = document.createElement('div');
@@ -49,17 +49,6 @@ function createTrackListElement(track, mode) {
     trackListElement.appendChild(content);
 
     return trackListElement;
-}
-
-function getTrackUrl(url, mode) {
-    if(!url.startsWith('/')) {
-        url = '/' + url;
-    }
-    if (mode === 'admin') {
-        return '/admin' + url;
-    } else {
-        return url;
-    }
 }
 
 module.exports = {

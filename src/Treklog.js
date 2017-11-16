@@ -11,7 +11,9 @@ const Treklog = {
     },
     loadTrack: require('./lib/trackLoader').loadTrack,
     auth: require('./lib/auth'),
-    uploader: require('./lib/trackUploader')
+    uploader: require('./lib/trackUploader'),
+    editor: require('./lib/trackEditor'),
+    animation: require('./lib/animation')
 }
 
 function renderUserTrackList() {
@@ -34,5 +36,7 @@ function renderTrackList(mode) {
         }
     });
 }
+
+
 
 window.Treklog = Treklog;

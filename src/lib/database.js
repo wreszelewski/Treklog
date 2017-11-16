@@ -1,5 +1,5 @@
 const moment = require('moment');
-const { getTracksRaw, storeFile, storeTrackMetadata } = require('./utils/firebase');
+const { getTracksRaw, storeFile, storeTrackMetadata, updateTrack, storeSocialImageAndMeta } = require('./utils/firebase');
 
 function getTracks() {
     let tracksObj = localStorage.getItem('tracks');
@@ -14,7 +14,7 @@ function getTracks() {
     } else {
         return getTracksRaw().then((tracksInYearRaw) => {
             newTracksObj = {
-                refreshDate: moment().toISOString,
+                refreshDate: moment().toISOString(),
                 tracks: tracksInYearRaw
             }
             localStorage.setItem('tracks', JSON.stringify(newTracksObj));
@@ -31,26 +31,43 @@ function getTrack(path) {
     return getTracks()
         .then(currentTrack => {
             splittedPath.forEach(pathElement => {
+                if(pathElement === 'admin') {
+                    return;
+                } 
                 currentTrack = currentTrack[pathElement];
             });
             return currentTrack
         });
 }
 
-function storeTrack(data, filteredTrack, originalTrack) {
+function storeTrack(data, filteredTrack, originalTrack, czmlTrack) {
     const metadata = {
         contentType: 'application/json',
     };
-    return storeFile(data.geoJsonPath, filteredTrack, metadata)
+    return storeFile(data.geoJsonPath.replace('geojson', 'czml'), czmlTrack, metadata)
         .then(() => {
+            return storeFile(data.geoJsonPath, filteredTrack, metadata);
+        }).then(() => {
             return storeFile(data.originalGeoJsonPath, originalTrack, metadata);
         }).then(() => {
             return storeTrackMetadata(data.url, data);
         });
 }
 
+function setTrackInitialPosition(path, initialPosition) {
+    path = path.replace('/admin', '');
+    return updateTrack(path, 'initialPosition', initialPosition);
+}
+
+function storeSocialImage(path, data) {
+    path = path.replace('/admin', '');
+    return storeSocialImageAndMeta(path, data);
+}
+
 module.exports = {
     getTracks,
     getTrack,
-    storeTrack
+    storeTrack,
+    setTrackInitialPosition,
+    storeSocialImage
 }

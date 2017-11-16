@@ -10,12 +10,16 @@
     ],
     "rewrites": [
       {
-        "source": "/admin**",
+        "source": "/admin",
+        "destination": "/admin.html"
+      },
+      {
+        "source": "/admin/**",
         "destination": "/admin.html"
       },
       {
         "source": "**",
-        "destination": "/index.html"
+        "function": "indexPage"
       }
     ]
   }

@@ -34,11 +34,7 @@
             <button class="ui inverted button" onclick="$('#addTrack').modal('show')">Dodaj trasę</a>
     </div>
 
-    <div id="screenLoader" class="ui segment">
-            <div class="ui active inverted dimmer">
-                <div class="ui large text loader">Ładowanie</div>
-            </div>
-        </div>
+    
     
         <div id="trackMenu" class="ui basic tiny modal">
             <div class="content">
@@ -73,6 +69,17 @@
         </div>
     </div>
 
+    <div id="editTrack">
+        <div id="editTrackLeftUpper">
+            <button class="ui inverted button" onclick="Treklog.editor.setInitialPosition()">Ustaw pozycję startową</button>
+            <button class="ui inverted button" onclick="Treklog.editor.setSocialImage()">Ustaw miniaturkę</button>
+        </div>
+    </div>
+    <div id="screenLoader" class="ui segment">
+        <div class="ui active inverted dimmer">
+            <div class="ui large text loader">Ładowanie</div>
+        </div>
+    </div>
     <!-- Our application code. -->
     <script src="/assets/js/bundle.js"></script>    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/spark-md5/3.0.0/spark-md5.min.js"></script>
