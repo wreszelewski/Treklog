@@ -228,8 +228,11 @@ button.cesium-infoBox-camera {
     margin-top: 1vh;
 }
 
-.cesium-viewer-bottom {
-    z-index: 1;
+@media (max-width: 1000px) {
+
+    .cesium-viewer-bottom {
+        z-index: 1;
+    }
 }
 
 .ui.progress .bar {
