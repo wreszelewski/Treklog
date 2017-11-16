@@ -228,7 +228,7 @@ button.cesium-infoBox-camera {
     margin-top: 1vh;
 }
 
-@media (max-width: 1000px) {
+@media (min-width: 800px) {
 
     .cesium-viewer-bottom {
         z-index: 1;
