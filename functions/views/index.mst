@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Use correct character set. -->
+    <meta charset="utf-8">
+    <!-- Tell IE to use the latest, best version. -->
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <!-- Make the application on mobile take up the full browser screen and disable user scaling. -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+        <meta property="fb:app_id" content="314100332403362" />
+        <meta property="og:type"   content="fitness.course" /> 
+        <meta property="og:url"    content="https://treklog.reszelewski.pl{{{url}}}" /> 
+        <meta property="og:title"  content="{{name}}" /> 
+        <meta property="og:image"  content="{{{socialImage}}}" />
+        <meta property="og:description"  content="{{{description}}}" />
+        <meta property="fitness:distance:value"  content="{{{distance}}}" />
+        <meta property="fitness:distance:units"  content="km" />
+        <meta property="fitness:duration:value"  content="{{{duration}}}" />
+        <meta property="fitness:duration:units"  content="ms" />
+    <title>Treklog</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.13/semantic.min.css">
+
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.13/semantic.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/webpack-cesium/1.37.0/webpack.cesium.js"></script>
+    <style>
+        @import url(/assets/css/widgets/widgets.css);
+    </style>
+    <style>
+        @import url(/assets/css/main.css);
+    </style>
+</head>
+
+<body>
+    <!-- A container for the Cesium Viewer to live in. -->
+    <div id="cesiumContainer"></div>
+    <div id="menuLauncher">
+        <button class="ui inverted large button" onclick="shareToFb()"><i class="facebook f icon"></i>Podziel się</button>
+        <button class="ui inverted large button" onclick="$('#trackMenu').modal('show')">Menu</button>
+    </div>
+
+    <div id="screenLoader" class="ui segment">
+        <div class="ui active inverted dimmer">
+            <div class="ui massive text loader">Ładowanie</div>
+        </div>
+    </div>
+
+    <div id="trackMenu" class="ui basic tiny modal">
+        <div class="content">
+            <h1>Treklog</h1>
+            <div id="trackListContainer">
+
+                <div id="trackList" class="ui link divided items">
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="animationMenu" class="ui segment inverted hidden">
+            <div id="animationProgress" class="ui white small progress">
+                    <div id="animationProgressBar" class="bar"></div>
+                  </div>
+                  <div class="ui buttons">
+        <div class="ui icon button huge" data-content="Wolniej" onClick="Treklog.animation.slower()"><i class="backward icon"></i></div>
+        <div class="ui icon button huge" data-content="Idź" onClick="Treklog.animation.play()"><i class="play icon"></i></div>
+        <div class="ui icon button huge" data-content="Stój" onClick="Treklog.animation.pause()"><i class="pause icon"></i></div>
+        <div class="ui icon button huge" data-content="Powrót do swobodnej podróży" onClick="Treklog.animation.stop()"><i class="stop icon"></i></div>
+        <div class="ui icon button huge" data-content="Szybciej" onClick="Treklog.animation.faster()"><i class="forward icon"></i></div>
+      </div>
+      
+    </div>
+
+    <!-- Our application code. -->
+    <script src="/assets/js/bundle.js"></script>
+    <script>
+        var viewer = Treklog.setUp();
+        $(document).ready(function () {
+            window.Treklog.trackList.renderUserTrackList();
+        });
+        $('#animationProgress').click(function(e) {
+            Treklog.animation.setTimeFromTimeline(e);
+        })
+        function shareToFb() {
+            const appId = '314100332403362';
+            const href = encodeURIComponent(window.location.href);
+            window.open("https://www.facebook.com/dialog/share?app_id=" + appId + "&display=popup&href=" + href, "pop", "width=600, height=400, scrollbars=no");
+            return false;
+        }
+    </script>
+</body>
+
+</html>
