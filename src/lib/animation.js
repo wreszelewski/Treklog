@@ -1,4 +1,6 @@
 
+const moment = require('moment');
+
 var animationInitialized = false;
 let headings = [];
 let lastHeading = 0;
@@ -15,7 +17,6 @@ let secondsDuration = 0;
 function setInitialPosition(destination, orientation) {
     initialDestination = destination;
     initialOrientation = orientation;
-    timeout = 0;
 }
 
 function clearInitialPosition() {
@@ -28,7 +29,7 @@ function median(values){
     return a-b;
   });
 
-  if(values.length ===0) return 0
+  if(values.length === 0) return 0
 
   var half = Math.floor(values.length / 2);
 
@@ -80,59 +81,77 @@ function headingRotation(track) {
 
 function init() {
     return Promise.resolve().then(() => {
-        if(!animationInitialized) {
+       
+            $('#animationProgress').progress('set bar label', '0:00:00');
             viewer.clock.clockRange = Cesium.ClockRange.CLAMPED;
             viewer.clock.currentTime = viewer.clock.startTime;
             secondsDuration = Cesium.JulianDate.secondsDifference(viewer.clock.stopTime, viewer.clock.startTime);
-            viewer.dataSources.get(0).show = false;
             const track = viewer.dataSources.get(1)
             let lastPosition = track.entities.getById('path').position.getValue(viewer.clock.currentTime);
-            viewer.dataSources.get(1).show = true;
-            animationInitialized = true;
-            lastHeading = calculateMovementHeading(track);
-            eventListener = viewer.clock.onTick.addEventListener(() => {
+            
 
-               headingRotation(track);
-               if(backward < 4000) {
-                   viewer.camera.moveBackward(100);
-                   backward += 100;
-               }
-               const seconds = Cesium.JulianDate.secondsDifference(viewer.clock.currentTime, viewer.clock.startTime);
-               $('#animationProgress').progress({
-                total: secondsDuration,
-                value: seconds,
-                showActivity: false,
-                precision: 10,
-                autoSuccess: false
-              });
-            });
-            return viewer.flyTo(track.entities.getById('path')).then(() => {
-                return new Promise(resolve => {
-
-                    setTimeout(() => {
-    
-                        viewer.trackedEntity = track.entities.getById('path');
-                        backward = 0;
-                        resolve();
-                    }, timeout);
-                })
-            });
-        } else {
-            return Promise.resolve();
-        }
     })
 
 }
 
+
+function start(fly = true) {
+    return Promise.resolve().then(() => {
+        if(!animationInitialized) {
+            viewer.dataSources.get(0).show = false;
+            viewer.dataSources.get(1).show = true;
+            const track = viewer.dataSources.get(1);
+            lastHeading = calculateMovementHeading(track);            
+            eventListener = viewer.clock.onTick.addEventListener(() => {
+                
+                               headingRotation(track);
+                               if(animationInitialized && backward < 4000) {
+                                   viewer.camera.moveBackward(100);
+                                   backward += 100;
+                               }
+                               const seconds = Cesium.JulianDate.secondsDifference(viewer.clock.currentTime, viewer.clock.startTime);
+                               const secondsFormatted = formatSeconds(seconds);
+                               $('#animationProgress').progress({
+                                total: secondsDuration,
+                                value: seconds,
+                                showActivity: false,
+                                precision: 10,
+                                autoSuccess: false,
+                                label: 'ratio',
+                                text: {
+                                    ratio: secondsFormatted
+                                }
+                              });
+                
+                             });
+            console.log("TEST");
+            if(fly) {
+                viewer.flyTo(track.entities.getById('path'));
+            }
+            animationInitialized = true;
+            return new Promise(resolve => {
+                setTimeout(() => {
+
+                    viewer.trackedEntity = track.entities.getById('path');
+                    backward = 0;
+                    setTimeout(() => {
+
+                        resolve();
+                    }, 2000);                                        
+                }, 3200);
+            });
+        } else {
+            return Promise.resolve();
+        }
+    });
+}
+
 function play() {
-    return init().then(() => {
+    return start().then(() => {
         if(Cesium.JulianDate.equals(viewer.clock.currentTime, viewer.clock.stopTime)) {
             viewer.clock.currentTime = viewer.clock.startTime;
         }
-        setTimeout(() => {
-
-            viewer.clock.shouldAnimate = true;        
-        },2000);
+        viewer.clock.shouldAnimate = true;        
     })
 }
 
@@ -142,7 +161,6 @@ function pause() {
 
 function stop() {
     reset();
-    timeout = 3200;
     viewer.dataSources.get(1).show = false;
     viewer.dataSources.get(0).show = true;
     viewer.trackedEntity = null;
@@ -167,9 +185,10 @@ function slower() {
 }
 
 function reset() {
-    
+    timeout = 3200;    
     angleToApply = 0;
     angleApplied = 0;
+    lastHeading = 0;
     headings = [];
     viewer.clock.shouldAnimate = false;    
     animationInitialized = false;
@@ -183,30 +202,62 @@ function reset() {
         value: 0,
         showActivity: false,
         precision: 10,
-        autoSuccess: false
+        autoSuccess: false,
+        label: 'ratio',
+        text: {
+            ratio: '0:00:00 h'
+        }
         });
     
 }
 
 function setTimeFromTimeline(event) {
+        const secondsSinceStart = getTimeFromTimeline(event);
+        viewer.clock.currentTime = Cesium.JulianDate.addSeconds(viewer.clock.startTime, secondsSinceStart, new Cesium.JulianDate());
+        start();
+}
+
+function getTimeFromTimeline(event) {
     const width = $('#animationProgress').width();
     const offset = $('#animationProgress').offset();
+    console.log(event.pageX);
     const position = event.pageX - offset.left;
-    console.log(position);
     const percent = position / width;
-    console.log(percent);
     const secondsSinceStart = percent * secondsDuration;
-    console.log(secondsSinceStart);
-    viewer.clock.currentTime = Cesium.JulianDate.addSeconds(viewer.clock.startTime, secondsSinceStart, new Cesium.JulianDate());
+    return secondsSinceStart
+}
+
+function timelineHover(event) {
+        const secondsSinceStart = getTimeFromTimeline(event);
+        const newLabel = formatSeconds(secondsSinceStart);
+        const newPosition = event.pageX - (newLabel.length * 4);
+        $('#mouseLabel').html(newLabel);
+        $('#mouseLabel').css({left: newPosition, display: 'block'});
 }
 
 function showBar() {
+    $('#animationProgress').progress('set bar label', '0:00:00 h');
     $('#animationMenu').show();
 }
 
+function twoZeroes(value) {
+    if(value < 10) {
+        return '0' + value.toString();
+    } else {
+        return value.toString();
+    }
+}
 
+function formatSeconds(seconds) {
+    const duration = moment.duration(seconds, 'seconds');
+    const secs = duration.seconds();
+    const mins = duration.minutes();
+    const hours = duration.asHours().toString().split('.')[0];
+    return hours + ':' + twoZeroes(mins) + ':' + twoZeroes(secs) + ' h';
+}
 
 module.exports = {
+   init,
    play,
    pause,
    stop,
@@ -216,5 +267,6 @@ module.exports = {
    setInitialPosition,
    clearInitialPosition,
    setTimeFromTimeline,
+   timelineHover,
    showBar
 }

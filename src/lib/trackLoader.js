@@ -64,7 +64,7 @@ function loadTrack(track, maxFlightHeight) {
             } else {
                 return viewer.flyTo(addGeoJson);
             }
-        });
+        }).then(() => animation.init());
 }
 
 module.exports = {
