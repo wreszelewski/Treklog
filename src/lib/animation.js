@@ -204,7 +204,7 @@ function reset() {
         autoSuccess: false,
         label: 'ratio',
         text: {
-            ratio: '0:00:00 h'
+            ratio: '0:00:00h'
         }
         });
     
@@ -234,7 +234,7 @@ function timelineHover(event) {
 }
 
 function showBar() {
-    $('#animationProgress').progress('set bar label', '0:00:00 h');
+    $('#animationProgress').progress('set bar label', '0:00:00h');
     $('#animationMenu').show();
 }
 
@@ -251,7 +251,7 @@ function formatSeconds(seconds) {
     const secs = duration.seconds();
     const mins = duration.minutes();
     const hours = duration.asHours().toString().split('.')[0];
-    return hours + ':' + twoZeroes(mins) + ':' + twoZeroes(secs) + ' h';
+    return hours + ':' + twoZeroes(mins) + ':' + twoZeroes(secs) + 'h';
 }
 
 module.exports = {
