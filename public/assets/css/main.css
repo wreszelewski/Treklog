@@ -206,7 +206,7 @@ button.cesium-infoBox-camera {
     right: 10px;
 }
 
-#animationMenu {
+.bottom-menu {
     position: absolute;
     margin: 0;
     bottom: 0;
@@ -214,8 +214,13 @@ button.cesium-infoBox-camera {
     width: 100vw;
     padding: 0;
     background-color: rgba(0, 0, 0, 0.75);
-    text-align: right;
+}
+
+#animationMenu {
+    background-color: transparent;
     display: none;
+    text-align: right;
+    padding: 0;
 }
 
 .ui.progress:first-child {
@@ -224,15 +229,8 @@ button.cesium-infoBox-camera {
 
 #animationMenu .ui.buttons {
     margin-right: 5vw;
-    margin-bottom: 3vh;
-    margin-top: 1vh;
-}
-
-@media (min-width: 800px) {
-
-    .cesium-viewer-bottom {
-        z-index: 1;
-    }
+    margin-bottom: 10px;
+    margin-top: 10px;
 }
 
 .ui.progress .bar {
@@ -243,4 +241,21 @@ button.cesium-infoBox-camera {
 .ui.progress {
     cursor: pointer;
     background: rgba(0,0,0,.5)
+}
+
+.cesium-widget-credits {
+    text-align: left;
+    line-height: 1.2em;
+    padding-left: 2px;
+    position: relative !important;
+    font-size: 10px !important;
+}
+
+.cesium-widget-credits img {
+    height: 20px;
+}
+
+.cesium-credit-textContainer {
+    display: inline-block;
+    margin-bottom: 2px;
 }

@@ -18,7 +18,9 @@ function setUp() {
         clockViewModel: null,
         imageryProviderViewModels: imageryProviders,
         terrainProviderViewModels: [],
-        terrainExaggeration: 2.0
+        terrainExaggeration: 2.0,
+        fullscreenButton: false,
+        creditContainer: 'cesiumCredits'
     });
 
 
