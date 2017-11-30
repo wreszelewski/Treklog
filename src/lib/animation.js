@@ -124,7 +124,6 @@ function start(fly = true) {
                               });
                 
                              });
-            console.log("TEST");
             if(fly) {
                 viewer.flyTo(track.entities.getById('path'));
             }
@@ -220,7 +219,6 @@ function setTimeFromTimeline(event) {
 function getTimeFromTimeline(event) {
     const width = $('#animationProgress').width();
     const offset = $('#animationProgress').offset();
-    console.log(event.pageX);
     const position = event.pageX - offset.left;
     const percent = position / width;
     const secondsSinceStart = percent * secondsDuration;
