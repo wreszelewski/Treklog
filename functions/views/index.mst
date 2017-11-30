@@ -63,7 +63,10 @@
      <div class="bottom-menu">
     <div id="animationMenu" class="ui segment inverted hidden">
             <div id="animationProgress" class="ui white small progress">
-                    <div id="animationProgressBar" class="bar"></div>
+                    <div id="animationProgressBar" class="bar">
+                        <div class="progress"></div>
+                        <div id="mouseLabel"></div>
+                    </div>
                   </div>
         <div class="ui buttons">
         <div class="ui icon button huge" data-content="Wolniej" onClick="Treklog.animation.slower()"><i class="backward icon"></i></div>
@@ -87,7 +90,9 @@
         });
         $('#animationProgress').click(function(e) {
             Treklog.animation.setTimeFromTimeline(e);
-        })
+        });
+        $('#animationProgress').mousemove(Treklog.animation.timelineHover);
+        $('#animationProgress').mouseleave(() => {$('#mouseLabel').css({display: 'none'})});
         function shareToFb() {
             const appId = '314100332403362';
             const href = encodeURIComponent(window.location.href);
