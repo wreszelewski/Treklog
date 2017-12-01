@@ -1,13 +1,13 @@
 const moment = require('moment');
+const { getCesiumTerrainForGeoJson } = require('./terrain');
 
 function createCzmlPath(geojson, mode) {
 
     let path = [],
         timestep = 0;
 
-    let pathCartographic = geojson.features[0].geometry.coordinates.map(point => new Cesium.Cartographic.fromDegrees(point[0], point[1]));
-    return Cesium.sampleTerrainMostDetailed(viewer.terrainProvider, pathCartographic)
-        .then(() => {
+    return getCesiumTerrainForGeoJson(geojson)
+        .then((pathCartographic) => {
             geojson.features[0].geometry.coordinates.forEach((point, index) => {
                 path.push(timestep);
                 path.push(point[0]);
@@ -16,10 +16,9 @@ function createCzmlPath(geojson, mode) {
 
                 const duration = (moment(geojson.features[0].properties.coordTimes[index+1]) - moment(geojson.features[0].properties.coordTimes[index])) / 1000;
                 timestep += duration;
-        })
-
-        return path
-    });
+            });
+            return path
+        });
 
 }
 

@@ -28,6 +28,7 @@
     <!-- A container for the Cesium Viewer to live in. -->
     <div id="cesiumContainer"></div>
     <div id="menuLauncher">
+        <button class="ui inverted large button" onclick="shareToFb()"><i class="facebook f icon"></i>Podziel się</button>            
         <button class="ui inverted large button" onclick="$('#trackMenu').modal('show')">Menu</button>
     </div>
 
@@ -83,7 +84,12 @@
         })
         $('#animationProgress').mousemove(Treklog.animation.timelineHover);
         $('#animationProgress').mouseleave(() => {$('#mouseLabel').css({display: 'none'})});
-
+        function shareToFb() {
+            const appId = '314100332403362';
+            const href = encodeURIComponent(window.location.href);
+            window.open("https://www.facebook.com/dialog/share?app_id=" + appId + "&display=popup&href=" + href, "pop", "width=600, height=400, scrollbars=no");
+            return false;
+        }
     </script>
 </body>
 

@@ -23,6 +23,11 @@ describe('Track', () => {
             storeTrack: jasmine.createSpy().andReturn(Promise.resolve())
         }
         mockery.registerMock('../database', storeTrackMock);
+
+        const czmlMock = {
+            fromGeoJson: () => {test: 'a'}
+        }
+        mockery.registerMock('./czml', czmlMock);
         Track = require('../../lib/utils/geojson').Track;
     });
 

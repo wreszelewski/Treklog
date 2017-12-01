@@ -40,14 +40,12 @@ function getTrack(path) {
         });
 }
 
-function storeTrack(data, filteredTrack, originalTrack, czmlTrack) {
+function storeTrack(data, filteredTrack, originalTrack) {
     const metadata = {
         contentType: 'application/json',
     };
-    return storeFile(data.geoJsonPath.replace('geojson', 'czml'), czmlTrack, metadata)
+    return storeFile(data.geoJsonPath, filteredTrack, metadata)
         .then(() => {
-            return storeFile(data.geoJsonPath, filteredTrack, metadata);
-        }).then(() => {
             return storeFile(data.originalGeoJsonPath, originalTrack, metadata);
         }).then(() => {
             return storeTrackMetadata(data.url, data);

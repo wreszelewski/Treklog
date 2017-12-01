@@ -214,8 +214,7 @@ class Track {
 
     store() {
         const data = this._serialize();
-        console.log(this.czml);
-        return storeTrack(data, this.filteredTrack, this.originalGeoJson, this.czml);
+        return storeTrack(data, this.filteredTrack, this.originalGeoJson);
     }
 
 }

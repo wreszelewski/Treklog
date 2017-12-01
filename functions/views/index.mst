@@ -62,7 +62,7 @@
 
      <div class="bottom-menu">
     <div id="animationMenu" class="ui segment inverted hidden">
-            <div id="animationProgress" class="ui white small progress">
+            <div id="animationProgress" class="ui white progress">
                     <div id="animationProgressBar" class="bar">
                         <div class="progress"></div>
                         <div id="mouseLabel"></div>
