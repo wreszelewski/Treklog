@@ -82,6 +82,7 @@
         $('#animationProgress').click(function(e) {
             Treklog.animation.setTimeFromTimeline(e);
         });
+        Treklog.animation.animationProgress.setHandlers();
         function shareToFb() {
             const appId = '314100332403362';
             const href = encodeURIComponent(window.location.href);

@@ -19,12 +19,15 @@ function formatSeconds(seconds) {
 class AnimationProgress {
     construct() {
         this.duration = 0;
-        $('#animationProgress').mousemove(this.animationProgressHover);
-        $('#animationProgress').mouseleave(() => {$('#mouseLabel').css({display: 'none'})});
     }
 
     setDuration(duration) {
         this.duration = duration;
+    }
+
+    setHandlers() {
+        $('#animationProgress').mousemove(this.animationProgressHover.bind(this));
+        $('#animationProgress').mouseleave(() => {$('#mouseLabel').css({display: 'none'})});
     }
 
     initializeAnimationProgress() {
