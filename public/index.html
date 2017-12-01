@@ -81,9 +81,7 @@
         $
         $('#animationProgress').click(function(e) {
             Treklog.animation.setTimeFromTimeline(e);
-        })
-        $('#animationProgress').mousemove(Treklog.animation.timelineHover);
-        $('#animationProgress').mouseleave(() => {$('#mouseLabel').css({display: 'none'})});
+        });
         function shareToFb() {
             const appId = '314100332403362';
             const href = encodeURIComponent(window.location.href);

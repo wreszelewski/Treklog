@@ -8,7 +8,6 @@ $(document).ready(function () {
         loadTrackByPath(window.location.pathname, config.cesium.navigation.maxLinkFlightHeight)
             .then(() => {
                 loader.hideLoader();
-                animation.showBar();                
                 if(window.location.pathname !== '/admin') {
                     $('#editTrack').show();
                 }
@@ -35,7 +34,6 @@ function getTrackLinkHandler(url, mode) {
         loadTrackByPath(url, config.cesium.navigation.maxLinkFlightHeight)
             .then(() => {
                 loader.hideLoader();
-                animation.showBar();
                 if(mode === 'admin') {
                     $('#editTrack').show();
                 }
