@@ -43,9 +43,7 @@ describe("trackList", function() {
             const trackList = TrackList.createTrackList(tracksPerYear, mode);
             let wrapper = document.createElement('div');
             wrapper.appendChild(trackList[0]);
-            expect(wrapper.innerHTML).toEqual('<div class="item"><div class="content"><div class="header">test - 02.09.2017</div><div>test</div></div></div>');
-            expect(navMock.getTrackLinkHandler).toHaveBeenCalledWith('/2017/test', 'admin');
-      
+            expect(wrapper.innerHTML).toEqual('<div data-url="/2017/test" class="item"><div class="content"><div class="header">test - 02.09.2017</div><div>test</div></div></div>');
     });
 
     it('should create properly formatted user DOM Element', () => {
@@ -66,9 +64,7 @@ describe("trackList", function() {
             const trackList = TrackList.createTrackList(tracksPerYear, mode);
             let wrapper = document.createElement('div');
             wrapper.appendChild(trackList[0]);
-            expect(wrapper.innerHTML).toEqual('<div class="item"><div class="content"><div class="header">test - 02.09.2017</div><div>test</div></div></div>');
-            expect(navMock.getTrackLinkHandler).toHaveBeenCalledWith('/2017/test', 'user');
-      
+            expect(wrapper.innerHTML).toEqual('<div data-url="/2017/test" class="item"><div class="content"><div class="header">test - 02.09.2017</div><div>test</div></div></div>');
           });
 
     it('should create multiple elements sorted by created date', () => {
@@ -103,7 +99,7 @@ describe("trackList", function() {
       const mode = 'user';
 
       const trackList = TrackList.createTrackList(tracksPerYear, mode);
-      const names = trackList.map((track => track.href));
+      const names = trackList.map((track => track.getAttribute('data-url')));
       expect(names).toEqual(['/2017/test3', '/2017/test2', '/2016/test1']);
     })
   });

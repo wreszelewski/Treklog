@@ -1,4 +1,4 @@
-const { getTrackLinkHandler, getTrackUrl } = require('./nav');
+const { linkHandler, getTrackUrl } = require('./nav');
 const moment = require('moment');
 
 function createTrackList(tracksPerYear, mode) {
@@ -27,10 +27,9 @@ function getDateComparator(tracks) {
 }
 
 function createTrackListElement(track, mode) {
-
     let trackListElement = document.createElement('div');
-    trackListElement.href = getTrackUrl(track.url, mode);
-    trackListElement.addEventListener('click', getTrackLinkHandler(track.url, mode));
+    trackListElement.setAttribute('data-url', getTrackUrl(track.url, mode));
+    trackListElement.addEventListener('click', (event) => { linkHandler(event, track.url, mode)});
     trackListElement.className = "item";
 
     let content = document.createElement('div');

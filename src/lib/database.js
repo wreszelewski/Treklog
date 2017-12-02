@@ -1,24 +1,16 @@
 const moment = require('moment');
 const { getTracksRaw, storeFile, storeTrackMetadata, updateTrack, storeSocialImageAndMeta } = require('./utils/firebase');
+let tracksObj = null;
+
 
 function getTracks() {
-    let tracksObj = localStorage.getItem('tracks');
+
     if(tracksObj) {
-        tracksObj = JSON.parse(tracksObj);
-    }
-    
-    const hourBefore = moment();
-    hourBefore.subtract(1, 'hours');
-    if(tracksObj && moment(tracksObj.refreshDate).isAfter(hourBefore)) {
-        return Promise.resolve(tracksObj.tracks);
+        return Promise.resolve(tracksObj);
     } else {
         return getTracksRaw().then((tracksInYearRaw) => {
-            newTracksObj = {
-                refreshDate: moment().toISOString(),
-                tracks: tracksInYearRaw
-            }
-            localStorage.setItem('tracks', JSON.stringify(newTracksObj));
-            return newTracksObj.tracks;
+            tracksObj = tracksInYearRaw;
+            return tracksObj;
         });
     }
 }

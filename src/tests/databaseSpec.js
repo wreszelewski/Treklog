@@ -24,7 +24,7 @@ describe('database', () => {
     });
 
     describe('tracks metadata', () => {
-        it('should get list of all tracks from db and store it in cache if not in cache', (finishTest) => {
+        it('should get list of all tracks from db and store it in memory if not in memory', (finishTest) => {
 
             const tracksMock = {
                 '2017': {
@@ -40,7 +40,6 @@ describe('database', () => {
             database.getTracks()
                 .then((tracks) => {
                     expect(tracks).toEqual(tracksMock);
-                    expect(JSON.parse(localStorage.getItem('tracks')).tracks).toEqual(tracksMock);
                     expect(firebaseMock.getTracksRaw).toHaveBeenCalled();
                     finishTest();
                 }).catch(error => {
@@ -48,8 +47,8 @@ describe('database', () => {
                 })
         });
 
-        it('should get list of all tracks from db and store it in cache if cache is outdated', (finishTest) => {
-            
+        it('should get list of all tracks from memory if its there', (finishTest) => {
+
             const tracksMock = {
                 '2017': {
                     'test-test':
@@ -58,67 +57,31 @@ describe('database', () => {
                     }
                 }
             }
-            const twoHoursBefore = moment();
-            twoHoursBefore.subtract(2, 'hours');
-            const cacheContent = {
-                refreshDate: twoHoursBefore.toISOString(),
-                tracks: {
-                    '2017': {
-                        'test-test': { a: 'c' }
-                    }
-                }
-            }
 
-            localStorage.setItem('tracks', JSON.stringify(cacheContent));
             firebaseMock.getTracksRaw.andReturn(Promise.resolve(tracksMock));
-            
-            database.getTracks()
-                .then((tracks) => {
-                    expect(tracks).toEqual(tracksMock);
-                    expect(JSON.parse(localStorage.getItem('tracks')).tracks).toEqual(tracksMock);
-                    expect(firebaseMock.getTracksRaw).toHaveBeenCalled();
-                    finishTest();
-                }).catch(error => {
-                    finishTest(error);
-                })
-        })
-
-        it('should get list of all tracks from cache if cache is fresh', (finishTest) => {
-
-            const cacheContent = {
-                refreshDate: moment().toISOString(),
-                tracks: {
-                    '2017': {
-                        'test-test': { a: 'c' }
-                    }
-                }
-            }
-
-            localStorage.setItem('tracks', JSON.stringify(cacheContent));
 
             database.getTracks()
-                .then((tracks) => {
-                    expect(tracks).toEqual(cacheContent.tracks);
-                    expect(JSON.parse(localStorage.getItem('tracks')).tracks).toEqual(cacheContent.tracks);
-                    expect(firebaseMock.getTracksRaw).not.toHaveBeenCalled();
-                    finishTest();
+                .then(() => {
+                    return database.getTracks()
+                        .then((tracks) => {
+                            expect(tracks).toEqual(tracksMock);
+                            expect(firebaseMock.getTracksRaw.calls.length).toEqual(1);
+                            finishTest();
+                        });
                 }).catch(error => {
                     finishTest(error);
                 })
         });
 
         it('should return track from path with "/" at start', (finishTest) => {
-            const cacheContent = {
-                refreshDate: moment().toISOString(),
-                tracks: {
+            const tracksMock =  {
                     '2017': {
                         'test-test': { a: 'c' }
                     }
-                }
-            }
+            };
 
-            localStorage.setItem('tracks', JSON.stringify(cacheContent));
-
+            firebaseMock.getTracksRaw.andReturn(Promise.resolve(tracksMock));
+            
             database.getTrack('/2017/test-test')
                 .then((track) => {
                     expect(track).toEqual({a: 'c'});
@@ -127,17 +90,14 @@ describe('database', () => {
         });
 
         it('should return track from path without "/" at start', (finishTest) => {
-            const cacheContent = {
-                refreshDate: moment().toISOString(),
-                tracks: {
+            const tracksMock = {
                     '2017': {
                         'test-test': { a: 'c' }
                     }
-                }
             }
 
-            localStorage.setItem('tracks', JSON.stringify(cacheContent));
-
+            firebaseMock.getTracksRaw.andReturn(Promise.resolve(tracksMock));
+            
             database.getTrack('2017/test-test')
                 .then((track) => {
                     expect(track).toEqual({a: 'c'});

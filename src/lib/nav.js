@@ -3,7 +3,7 @@ const config = require('./config');
 const loader = require('./loader');
 const animation = require('./animation');
 
-$(document).ready(function () {
+function initialPathLoad() {
     if (window.location.pathname !== "/" && window.location.pathname !== '/admin') {
         loadTrackByPath(window.location.pathname, config.cesium.navigation.maxLinkFlightHeight)
             .then(() => {
@@ -13,7 +13,8 @@ $(document).ready(function () {
                 }
             });
     }
-});
+
+}
 
 window.onpopstate = function (event) {
     if (event.state.treklogModified) {
@@ -21,24 +22,25 @@ window.onpopstate = function (event) {
     }
 }
 
-function getTrackLinkHandler(url, mode) {
-    return function (event) {
-        animation.reset();
+function linkHandler(event, url, mode) {
         event.preventDefault();
-        loader.showLoader();
-        $('#trackMenu').modal('hide');
-        history.pushState({
-            treklogModified: true,
-            url: getTrackUrl(url, mode)
-        }, '', getTrackUrl(url, mode));
-        loadTrackByPath(url, config.cesium.navigation.maxLinkFlightHeight)
-            .then(() => {
-                loader.hideLoader();
-                if(mode === 'admin') {
-                    $('#editTrack').show();
-                }
-            });
-    }
+        if(!viewer) {
+            window.location.replace(getTrackUrl(url,mode));
+        } else {
+            loader.showLoader();
+            $('#trackMenu').modal('hide');
+            history.pushState({
+                treklogModified: true,
+                url: getTrackUrl(url, mode)
+            }, '', getTrackUrl(url, mode));
+            loadTrackByPath(url, config.cesium.navigation.maxLinkFlightHeight)
+                .then(() => {
+                    loader.hideLoader();
+                    if(mode === 'admin') {
+                        $('#editTrack').show();
+                    }
+                });
+        }
 }
 
 function getTrackUrl(url, mode) {
@@ -53,6 +55,7 @@ function getTrackUrl(url, mode) {
 }
 
 module.exports = {
-    getTrackLinkHandler,
-    getTrackUrl
+    linkHandler,
+    getTrackUrl,
+    initialPathLoad
 }

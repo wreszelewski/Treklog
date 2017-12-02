@@ -50,7 +50,10 @@ function fromGeoJson(geojson, multiplier = 300) {
                 billboard : {
                     image : "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH4QsOFx4xGjWutQAAAOdJREFUaN7tmcsSxSAIQ43T//9l7upuurFIEBxg207NMfHZMbq6ahdYH5IxRNkwUgBohbNBECmeAYFo8VYIZBBvgYCbeHm9BrhA4Ih4R4h5+zowo3NvbauOA7qpAdv519bjt0nBxQ5cH6EGKATgM4iNK3EcgMi350SQ54hwR5A6gxjE8zOzLU6E/lH4GiXiGOAfaFYQC/Fap/nTKJBzDGSteod6L4jdWa5mhNguWNaY2g4wXAi93LVCMLYnHaFdF9L84NiBYO5sZ4Dl1E6bmcUdj9AqSh6Abj32hohwhwJx8lq+q6ti/QC86zxQ2Gxr3gAAAABJRU5ErkJggg==",
                     scale : 0.75,
-                    verticalOrigin: "BOTTOM"
+                    verticalOrigin: "BOTTOM",
+                    eyeOffset: {
+                        "cartesian": [ 0.0, 0.0, -30.0 ]
+                    },
                 },
                 position: {
                     epoch: globalStartTime,

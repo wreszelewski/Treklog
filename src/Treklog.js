@@ -13,7 +13,8 @@ const Treklog = {
     auth: require('./lib/auth'),
     uploader: require('./lib/trackUploader'),
     editor: require('./lib/trackEditor'),
-    animation: require('./lib/animation')
+    animation: require('./lib/animation'),
+    nav: require('./lib/nav')
 }
 
 function renderUserTrackList() {

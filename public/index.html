@@ -15,7 +15,6 @@
 
     <!-- Compiled and minified JavaScript -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.13/semantic.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/webpack-cesium/1.37.0/webpack.cesium.js"></script>
     <style>
         @import url(/assets/css/widgets/widgets.css);
     </style>
@@ -34,7 +33,7 @@
 
     <div id="screenLoader" class="ui segment">
         <div class="ui active inverted dimmer">
-            <div class="ui massive text loader">Ładowanie</div>
+            <div class="ui massive text loader">Ładowanie widoku 3D...<br>Może chwilę potrwać.<br></div>
         </div>
     </div>
 
@@ -102,16 +101,10 @@
     <script src="/assets/js/bundle.js"></script>
     <script>
         var expanderCommand;
+        var viewer;
         $('.singleStat').popup();
-        var viewer = Treklog.setUp();
-        $(document).ready(function () {
-            window.Treklog.trackList.renderUserTrackList();
-        });
-        $
-        $('#animationProgress').click(function(e) {
-            Treklog.animation.setTimeFromTimeline(e);
-        });
-        Treklog.animation.animationProgress.setHandlers();
+        window.Treklog.trackList.renderUserTrackList();
+        
         function shareToFb() {
             const appId = '314100332403362';
             const href = encodeURIComponent(window.location.href);
@@ -141,6 +134,24 @@
         }
         $(window).resize(prepareExpanderLabel);
     </script>
+    <script>
+        function initViewer() {
+            viewer = Treklog.setUp();
+            Treklog.animation.animationProgress.setHandlers();
+            $('#animationProgress').click(function(e) {
+                Treklog.animation.setTimeFromTimeline(e);
+            });
+            Treklog.nav.initialPathLoad();
+        }
+        $(window).bind("load", function() {
+            $.ajaxSetup({
+                cache: true
+            });
+            
+            $.getScript("https://cdnjs.cloudflare.com/ajax/libs/webpack-cesium/1.37.0/webpack.cesium.js", initViewer);
+        });
+    </script>
+    
 </body>
 
 </html>
