@@ -132,7 +132,12 @@
 
         function descriptionExpander() {
             $('#trackDescription').slideToggle();
-            prepareExpanderLabel();
+            if(expanderCommand === 'Zwiń') {
+                expanderCommand = 'Pokaż opis';
+            } else {
+                expanderCommand = 'Zwiń';
+            }
+            $('#descriptionExpander').html(expanderCommand);
         }
         $(window).resize(prepareExpanderLabel);
     </script>
