@@ -228,19 +228,28 @@ button.cesium-infoBox-camera {
 }
 
 #animationMenu .ui.buttons {
-    margin-right: 5vw;
-    margin-bottom: 10px;
-    margin-top: 10px;
+    margin: 0;
+    float: left;
 }
 
 .ui.progress .bar {
     background: white;
     min-width: 3px;
+    height: 27px;
 }
 
-.ui.progress {
+.movieMenu {
+    background-color: rgba(0,0,0, 0.7)
+}
+
+.movieMenu .ui.progress {
+    margin: 0 0  0 135px;
     cursor: pointer;
-    background: rgba(0,0,0,.5)
+}
+
+#cesiumCredits {
+    clear: both;
+    width: 100%;
 }
 
 .cesium-widget-credits {
@@ -263,7 +272,7 @@ button.cesium-infoBox-camera {
 .ui.progress .bar>.progress {
     color: grey;
     right: auto;
-    left: 0.5em;
+    left: 1.5em;
 }
 
 #mouseLabel {
@@ -276,3 +285,55 @@ button.cesium-infoBox-camera {
     border-radius: 5px;
     display: none;
 }
+
+.trackDescription {
+    text-align: center;
+    width: 90%;
+    margin: 0 5%;
+}
+
+.trackDescription h1 {
+    margin-top: 5px;
+    margin-bottom: 0;
+    font-size: 2.4rem;
+}
+
+.trackDescription h2 {
+    display: inline-block;
+    font-size: 1.2rem;
+    margin-top: 0;
+}
+
+.trackStats {
+    clear: both;
+}
+
+.ui.label.singleStat {
+    margin-bottom: 5px;
+}
+
+.movieMenu-btn {
+    float: left;
+    padding: 3px 4px 0px 0px;
+    width: 27px;
+    height: 27px;
+}
+
+.movieMenu-btn:hover {
+    background-color: white;
+    color: rgba(0,0,0,0.85);
+}
+
+.ui.button.descriptionExpander {
+    float: right;
+    margin-right: 20px;
+    margin-top: 10px;
+}
+
+
+@media (max-width: 700px) {
+    #trackDescription {
+        display: none;
+    }
+  }
+  

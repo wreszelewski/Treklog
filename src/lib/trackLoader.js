@@ -4,6 +4,7 @@ const loader = require('./loader');
 const czml = require('./utils/czml')
 const animation = require('./animation');
 const cameraPosition = require('./utils/cameraPosition');
+const { updateTrackDetails } = require('./trackDetails');
 
 function loadTrackByPath(path, maxFlightHeight) {
     return database.getTrack(path).then(function (track) {
@@ -13,6 +14,7 @@ function loadTrackByPath(path, maxFlightHeight) {
 
 function loadTrack(track, maxFlightHeight) {
     animation.reset();
+    updateTrackDetails(track);
     const storage = firebase.storage();
     return storage.ref(track.geoJsonPath)
         .getDownloadURL()

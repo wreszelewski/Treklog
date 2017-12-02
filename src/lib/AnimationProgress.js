@@ -1,20 +1,4 @@
-const moment = require('moment');
-
-function twoZeroes(value) {
-    if(value < 10) {
-        return '0' + value.toString();
-    } else {
-        return value.toString();
-    }
-}
-
-function formatSeconds(seconds) {
-    const duration = moment.duration(seconds, 'seconds');
-    const secs = duration.seconds();
-    const mins = duration.minutes();
-    const hours = duration.asHours().toString().split('.')[0];
-    return hours + ':' + twoZeroes(mins) + ':' + twoZeroes(secs) + 'h';
-}
+const { formatSeconds } = require('./utils/time');
 
 class AnimationProgress {
     construct() {
@@ -73,7 +57,7 @@ class AnimationProgress {
     animationProgressHover(event) {
         const secondsSinceStart = this.getTimeFromAnimationProgress(event);
         const newLabel = formatSeconds(secondsSinceStart);
-        const newPosition = event.pageX - (newLabel.length * 4);
+        const newPosition = event.pageX - (newLabel.length * 4) - 154;
         $('#mouseLabel').html(newLabel);
         $('#mouseLabel').css({left: newPosition, display: 'block'});
     }

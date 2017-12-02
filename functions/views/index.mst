@@ -60,21 +60,48 @@
         </div>
     </div>
 
-     <div class="bottom-menu">
-    <div id="animationMenu" class="ui segment inverted hidden">
+    <div class="bottom-menu">
+    <div id="animationMenu" class="ui segment inverted">
+            <div class="movieMenu">
+                <div class="">
+                    <div class="movieMenu-btn" data-content="Wolniej" onClick="Treklog.animation.slower()"><i class="backward small icon"></i></div>
+                    <div class="movieMenu-btn" data-content="Idź" onClick="Treklog.animation.play()"><i class="play small icon"></i></div>
+                    <div class="movieMenu-btn" data-content="Stój" onClick="Treklog.animation.pause()"><i class="pause small icon"></i></div>
+                    <div class="movieMenu-btn" data-content="Powrót do swobodnej podróży" onClick="Treklog.animation.stop()"><i class="stop small icon"></i></div>
+                    <div class="movieMenu-btn" data-content="Szybciej" onClick="Treklog.animation.faster()"><i class="forward small icon"></i></div>
+                </div>
             <div id="animationProgress" class="ui white progress">
                     <div id="animationProgressBar" class="bar">
-                        <div class="progress"></div>
-                        <div id="mouseLabel"></div>
+                            <div class="progress"></div>
+                            <div id="mouseLabel"></div>
                     </div>
                   </div>
-        <div class="ui buttons">
-        <div class="ui icon button huge" data-content="Wolniej" onClick="Treklog.animation.slower()"><i class="backward icon"></i></div>
-        <div class="ui icon button huge" data-content="Idź" onClick="Treklog.animation.play()"><i class="play icon"></i></div>
-        <div class="ui icon button huge" data-content="Stój" onClick="Treklog.animation.pause()"><i class="pause icon"></i></div>
-        <div class="ui icon button huge" data-content="Powrót do swobodnej podróży" onClick="Treklog.animation.stop()"><i class="stop icon"></i></div>
-        <div class="ui icon button huge" data-content="Szybciej" onClick="Treklog.animation.faster()"><i class="forward icon"></i></div>
+                  </div>
+        <div id="trackDescription" class="trackDescription">
+            <h1 id="trackName">Banikov</h1><h2 id="trackDesc">Chata Liptov - Jalovecka Dolina - Banikov - Ziarska Chata - Chata Liptov</h2>
+            <div class="trackStats">
+                <div class="ui label singleStat" data-title="Czas trwania" data-position="top center" data-variation="mini">
+                        <i class="wait icon"></i><span id="trackDuration">10:23:41h</span>
+                </div>
+                <div class="ui label singleStat"  data-title="Dystans" data-position="top center" data-variation="mini">
+                    <i class="resize horizontal icon"></i><span id="trackDistance">23.11km</span>
+                </div>
+                <div class="ui label singleStat heightStat"  data-title="Suma podejść" data-position="top center" data-variation="mini">
+                        <i class="long arrow up icon"></i><span id="trackAscent">1022m</span>
+                </div>
+                <div class="ui label singleStat heightStat"  data-title="Suma zejść" data-position="top center" data-variation="mini">
+                        <i class="long arrow down icon"></i><span id="trackDescent">1022m</span>
+                </div>
+                <div class="ui label singleStat heightStat"  data-title="Najwyższy punkt" data-position="top center" data-variation="mini">
+                        <i class="angle double up icon"></i><span id="trackMaxAltitude">1022m</span>
+                </div>
+                <div class="ui label singleStat heightStat"  data-title="Najniższy punkt" data-position="top center" data-variation="mini">
+                        <i class="angle double down icon"></i><span id="trackMinAltitude">1022m</span>
+                </div>
+            </div>
         </div>
+        
+        <button id="descriptionExpander" class="ui inverted small button descriptionExpander" onclick="descriptionExpander()"></button>
     </div>
     <div id="cesiumCredits"></div>
       
@@ -84,10 +111,13 @@
     <!-- Our application code. -->
     <script src="/assets/js/bundle.js"></script>
     <script>
+        var expanderCommand;
+        $('.singleStat').popup();
         var viewer = Treklog.setUp();
         $(document).ready(function () {
             window.Treklog.trackList.renderUserTrackList();
         });
+        $
         $('#animationProgress').click(function(e) {
             Treklog.animation.setTimeFromTimeline(e);
         });
@@ -98,6 +128,23 @@
             window.open("https://www.facebook.com/dialog/share?app_id=" + appId + "&display=popup&href=" + href, "pop", "width=600, height=400, scrollbars=no");
             return false;
         }
+        
+        function prepareExpanderLabel() {
+            if($('#trackDescription').css('display') === 'none') {
+                expanderCommand = 'Pokaż opis';
+            } else {
+                expanderCommand = 'Zwiń';
+            }
+            $('#descriptionExpander').html(expanderCommand);
+        }
+
+        prepareExpanderLabel();
+
+        function descriptionExpander() {
+            $('#trackDescription').slideToggle();
+            prepareExpanderLabel();
+        }
+        $(window).resize(prepareExpanderLabel);
     </script>
 </body>
 
