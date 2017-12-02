@@ -147,6 +147,7 @@
             } else {
                 expanderCommand = 'Zwiń';
             }
+            $('#descriptionExpander').html(expanderCommand);
         }
         $(window).resize(prepareExpanderLabel);
     </script>
