@@ -52,13 +52,32 @@
     <div class="bottom-menu">
     <div id="animationMenu" class="ui segment inverted">
             <div class="movieMenu">
-                <div class="">
-                    <div class="movieMenu-btn" data-content="Wolniej" onClick="Treklog.animation.slower()"><i class="backward small icon"></i></div>
-                    <div class="movieMenu-btn" data-content="Idź" onClick="Treklog.animation.play()"><i class="play small icon"></i></div>
-                    <div class="movieMenu-btn" data-content="Stój" onClick="Treklog.animation.pause()"><i class="pause small icon"></i></div>
-                    <div class="movieMenu-btn" data-content="Powrót do swobodnej podróży" onClick="Treklog.animation.stop()"><i class="stop small icon"></i></div>
-                    <div class="movieMenu-btn" data-content="Szybciej" onClick="Treklog.animation.faster()"><i class="forward small icon"></i></div>
-                </div>
+                    <div class="ui mini icon inverted borderless menu menuButtons">
+                            <a class="item" onClick="Treklog.animation.play()">
+                              <i class="play icon"></i>
+                            </a>
+                            <a class="item" onClick="Treklog.animation.pause()">
+                              <i class="pause icon"></i>
+                            </a>
+                            <a class="item" onClick="Treklog.animation.stop()">
+                              <i class="stop icon"></i>
+                            </a>
+                            <div id="settings" class="ui bottom left pointing dropdown icon item">
+                              <i class="setting icon"></i>
+                              <div class="ui menu movieOptions">
+                                    <div class="item ui inverted form">
+                                            <div class="inline field">
+                                                <label>Szybkość</label>
+                                                <input id="speed" class="number" type="number" value="300" step="100">
+                                                <label class="unit">[x]</label>
+                                            </div>
+                                            <div class="field">
+                                                <button id="saveSettings" class="ui mini inverted button">Zapisz</button>
+                                            </div>
+                                          </div>
+                                </div>
+                          </div>
+                          </div>
             <div id="animationProgress" class="ui white progress">
                     <div id="animationProgressBar" class="bar">
                             <div class="progress"></div>
@@ -100,6 +119,13 @@
     <!-- Our application code. -->
     <script src="/assets/js/bundle.js"></script>
     <script>
+        $('.ui.dropdown').dropdown({
+            action: 'nothing',
+            onShow: () => {
+                $('#speed').val(viewer.clock.multiplier);
+            }
+        });
+
         var expanderCommand;
         var viewer;
         $('.singleStat').popup();
@@ -142,6 +168,10 @@
                 Treklog.animation.setTimeFromTimeline(e);
             });
             Treklog.nav.initialPathLoad();
+            $('#saveSettings').click(() => {
+                Treklog.animation.setSpeed(parseFloat($('#speed').val()));
+                $('#settings').dropdown('hide');
+            });
         }
         $(window).bind("load", function() {
             $.ajaxSetup({

@@ -235,7 +235,7 @@ button.cesium-infoBox-camera {
 .ui.progress .bar {
     background: white;
     min-width: 3px;
-    height: 27px;
+    height: 31px;
 }
 
 .movieMenu {
@@ -243,7 +243,7 @@ button.cesium-infoBox-camera {
 }
 
 .movieMenu .ui.progress {
-    margin: 0 0  0 135px;
+    margin: 0 0  0 149px;
     cursor: pointer;
 }
 
@@ -314,9 +314,9 @@ button.cesium-infoBox-camera {
 
 .movieMenu-btn {
     float: left;
-    padding: 3px 4px 0px 0px;
-    width: 27px;
-    height: 27px;
+    padding: 4.5px 5.5px 0px 0px;
+    width: 30px;
+    height: 30px;
 }
 
 .movieMenu-btn:hover {
@@ -330,10 +330,49 @@ button.cesium-infoBox-camera {
     margin-top: 10px;
 }
 
+.ui.inverted.menu.menuButtons {
+    width: 150px;
+    float: left;
+    background-color: transparent;
+    border-radius: 0;
+    margin: 0;
+}
 
+.ui.inverted.menu.menuButtons .item {
+    border-radius: 0;
+}
+
+.ui.inverted.menu.menuButtons .item:hover {
+    background-color: rgba(255,255,255, 0.5);
+}
 @media (max-width: 700px) {
     #trackDescription {
         display: none;
     }
   }
-  
+
+.movieOptions {
+    min-width: fit-content;
+    text-align: center;
+}
+
+.ui.menu .dropdown.item .menu.movieOptions {
+    background-color: #000;
+    border-radius: 3px;
+}
+
+.movieOptions .field {
+    text-align: center;
+}
+
+.ui.form .inline.field>input.number {
+    width: 7em;
+}
+
+.ui.form .field>label.unit {
+    margin-left: 5px;
+}
+
+.ui.pointing.dropdown>.menu.movieOptions:after {
+    background-color: inherit;
+}

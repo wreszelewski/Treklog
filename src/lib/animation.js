@@ -111,6 +111,10 @@ class Animation {
         viewer.clock.multiplier /= 2;
     }
 
+    setSpeed(value) {
+        viewer.clock.multiplier = value;
+    }
+
     setTimeFromTimeline(event) {
         const secondsSinceStart = this.animationProgress.getTimeFromAnimationProgress(event);
         viewer.clock.currentTime = Cesium.JulianDate.addSeconds(viewer.clock.startTime, secondsSinceStart, new Cesium.JulianDate());
